@@ -50,7 +50,7 @@ async function main () {
     
     console.log("---------------------------");
     //Elimino TODO
-        await contenedor.deleteAll()
+        //await contenedor.deleteAll()
         let deleteALL = await contenedor.getAll()
         console.log(deleteALL);
 }
