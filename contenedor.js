@@ -53,6 +53,9 @@ class Contenedor {
         }
     }
 
+
+
+
     //Objeto por ID
     async getById (id) {
         try {
@@ -63,6 +66,20 @@ class Contenedor {
             
         }
         
+    }
+
+    async getRandom(){
+        try {
+            const listado = await this.getAll();
+            const index = Math.floor(Math.random() * listado.length);
+            
+            console.log( listado.length);
+            console.log(index);
+
+            return listado[index]
+        } catch (error) {
+            console.log('Error al obtener el objeto '+error);
+        }
     }
 
     async deleteByID (id) {
@@ -76,6 +93,7 @@ class Contenedor {
         }
     }
 
+    
     async deleteAll(){
         try{
             await fs.promises.writeFile(this.ruta, JSON.stringify([], null, 2))

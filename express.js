@@ -52,13 +52,14 @@ async function main (){
 
     
     let productos = await contenedor.getAll();
+    let productoRandom = await contenedor.getRandom();
 
     app.get('/productos', (req, res) => {    
         res.send(productos)
     })
 
     app.get('/productoRandom', (req, res) => {
-        res.send(prod)
+        res.send(productoRandom)
     })
 
     server.on('error', (err) => { console.log(` =====> ERROR: ${err}`)})
