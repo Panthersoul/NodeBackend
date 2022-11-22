@@ -1,7 +1,6 @@
 import express, { Router } from "express";
 import ProductosApi from "../router/productosAPI.js"
 
-//const ProductosApi = require('./router/productsRouter.js')
 
 // router de productos
 
