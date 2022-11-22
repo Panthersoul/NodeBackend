@@ -1,61 +1,45 @@
 import express, { Router } from "express";
-import multer from "multer";
+import ProductosApi from "../router/productosAPI.js"
 
-const app = express();
-const router = Router();
+//const ProductosApi = require('./router/productsRouter.js')
 
-const personas = [];
-const mascotas = [];
+// router de productos
 
-app.use(express.json());
-app.use(express.urlencoded({extended: true }))
+const productosApi = new ProductosApi()
 
-router
-    .route("/personas")
-    .get((req, res) => {
-        res.json(personas)
-    })
-    .post((req, res) => {
-        const {nombre, apellido, edad } = req.body;
+const productosRouter = new Router()
 
-        console.log(req.body);
-        if (!nombre || !apellido || !edad){
-            res.status(400).send("You muse send, nombre, apellido or edad")
-        }
+productosRouter.use(express.json())
+productosRouter.use(express.urlencoded({ extended: true }))
 
-        res.status(201).json({nombre, apellido, edad})
-
-    });
-
-    router
-    .route("/mascota")
-    .get((req, res) => {
-        console.log("estoy en mascota");
-        res.json(mascotas)
-    })
-    .post((req, res) => {
-        const {nombre, raza, edad } = req.body;
-        
-        if (!nombre || !raza || !edad){
-            res.status(400).send("You muse send, name, raza or edad")
-        }
-
-        mascotas.push({nombre, raza, edad });
-        res.status(201).json({nombre, raza, edad })
-
-    });
-
-
-    router.get("/", (req, res)  => {
-        res.sendFile(__dirname + "/public/index.html")
-    })
-    //app.use("/", router);
-//app.use('/static', express.static(__dirname + '/public'));
-
-app.listen(3000, () =>  {
-    console.log("Server listening port 3000");
+productosRouter.get('/', (req, res) => {
+    res.json(productosApi.listarAll())
 })
 
-app.on("error", (error) => {
-    console.log(error);
+productosRouter.get('/:id', (req, res) => {
+    res.json(productosApi.listar(req.params.id))
 })
+
+productosRouter.post('/', (req, res) => {
+    res.json(productosApi.guardar(req.body))
+})
+
+productosRouter.put('/:id', (req, res) => {
+    res.json(productosApi.actualizar(req.body, req.params.id))
+})
+
+productosRouter.delete('/:id', (req, res) => {
+    res.json(productosApi.borrar(req.params.id))
+})
+
+// servidor
+
+const app = express()
+app.use(express.static('public'))
+app.use('/api/productos', productosRouter)
+
+const PORT = 8080
+const server = app.listen(PORT, () => {
+    console.log(`Servidor http escuchando en el puerto ${server.address().port}`)
+})
+server.on("error", error => console.log(`Error en servidor ${error}`))
