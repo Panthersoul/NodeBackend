@@ -1,41 +1,34 @@
-import express, { Router } from "express";
-import ProductosApi from "../router/productosAPI.js"
+import express from "express";
+import routerEjs from "./routes/indexEjs.js";
+import routerHandlebars from "./routes/indexHandlebars.js";
+import routerPug from "./routes/indexPug.js";
 
 
-// router de productos
+//Obtengo la ruta absoluta
+import { fileURLToPath } from 'url'
+import { dirname } from 'path'
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = dirname(__filename)
 
-const productosApi = new ProductosApi()
 
-const productosRouter = new Router()
-
-productosRouter.use(express.json())
-productosRouter.use(express.urlencoded({ extended: true }))
-
-productosRouter.get('/', (req, res) => {
-    res.json(productosApi.listarAll())
-})
-
-productosRouter.get('/:id', (req, res) => {
-    res.json(productosApi.listar(req.params.id))
-})
-
-productosRouter.post('/', (req, res) => {
-    res.json(productosApi.guardar(req.body))
-})
-
-productosRouter.put('/:id', (req, res) => {
-    res.json(productosApi.actualizar(req.body, req.params.id))
-})
-
-productosRouter.delete('/:id', (req, res) => {
-    res.json(productosApi.borrar(req.params.id))
-})
-
-// servidor
+    //********   Defino routers en funcion del template a usar     */
+//const router = routerEjs; 
+//const router = routerHandlebars;
+const router = routerPug;
 
 const app = express()
-app.use(express.static('public'))
-app.use('/api/productos', productosRouter)
+
+///////////////////////// PUG
+app.set('views', __dirname+"/views/viewsPug");
+app.set("view engine", "pug");
+app.use('/', router)
+
+
+// EJS //////////////////////////////////////////
+// app.set('views', __dirname+"/views/viewsEjs");
+// app.set("view engine", "ejs");
+// app.use('/', router)
+
 
 const PORT = 8080
 const server = app.listen(PORT, () => {

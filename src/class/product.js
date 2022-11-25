@@ -10,7 +10,11 @@ class ProductosApi {
     }
 
     listarAll() {
-        return [...this.productos]
+        if (this.productos.length > 0){
+            return [...this.productos]
+        }else {
+            return { error: 'No existen productos' }
+        }
     }
 
     guardar(prod) {
