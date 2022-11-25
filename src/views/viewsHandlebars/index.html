@@ -16,11 +16,11 @@
         var template = Handlebars.compile(`
             <h1>Hola soy un template HandleBars.</h1>
             <h6>Me han pasado por parámetro {{nombre}}</h6>
-            
+            {{{this.productos}}}
         `);
         // execute the compiled template and print the output to the console
         console.log(template({ nombre: "Andres!" }));
-        console.log(template({products}));
+    
         const html = template({nombre: "Andres"})
         document.querySelector("body").innerHTML = html;
       </script>

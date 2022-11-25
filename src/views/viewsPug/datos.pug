@@ -6,16 +6,17 @@ block datos
         label(style="display: inline; margin:5px", for="name")="Ingrese Nombre" 
         input(style='padding: 5px; margin:5px', type="text", id="name", name="name")
         label(style="display: inline; margin:5px", for="price")="Ingrese Precio"
-        input(style='padding: 5px; margin:5px', type="text",id="price", name="price")
+        input(style='padding: 5px; margin:5px', type="number",id="price", name="price")
         label(style="display: inline; margin:5px", for="stock")="Ingrese el Stock"
-        input(style='padding: 5px; margin:5px', type="text",id="stock", name="stock")
+        input(style='padding: 5px; margin:5px', type="number",id="stock", name="stock")
         br
         button(style="margin-top: 15px", type="submit")="Enviar"
 
     br
     hr
     br
-
+    a(href="/productos" )="Ver los articulos en una nueva pagina" 
+    br
     if productos.length < 1
         h3="No hay Productos"
     else

@@ -20,7 +20,7 @@ router.get('/', (req, res) => {
 
 // Devuelvo la plantilla HandleBars
 router.get('/productos', (req, res) => {
-    res.sendFile(join(__dirname,"../views/viewsHandlebars/index.html"), {products: productosApi})
+    res.sendFile(join(__dirname,"../views/viewsHandlebars/index.html"), {productos: productosApi.listarAll})
 })
 
 router.post('/productos', (req, res) => {    
