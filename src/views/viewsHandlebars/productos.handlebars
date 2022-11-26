@@ -30,13 +30,15 @@
             document.getElementById("showProducts").style.display = 'block';
             
             productos2.productos.forEach(element => {
-                var td = document.createElement("tr");
-                var t1 = document.createElement("td");
+                let td = document.createElement("tr");
+                let t1 = document.createElement("td");
                 t1.innerText = element.name;
-                var t2 = document.createElement("td");
+                let t2 = document.createElement("td");
                 t2.innerText = element.price;
-                var t3 = document.createElement("td");
-                t3.innerText = element.stock;
+                let t3 = document.createElement("td");
+                let imagen = document.createElement("img");
+                imagen.src = element.image;
+                t3.innerHTML = imagen.outerHTML;
 
                 t1.style.border = "1px solid"
                 t2.style.border = "1px solid"

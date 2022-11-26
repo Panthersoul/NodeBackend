@@ -5,8 +5,8 @@
     <input  type="text" id="name" name="name">
     <label for="price">Precio</label>
     <input  type="text" id="stock" name="price">
-    <label for="stock">Stock</label>
-    <input  type="text" id="stock" name="stock">
+    <label for="image">URL Imagen</label>
+    <input  type="text" id="image" name="image">
     <button type="submit">ENVIAR</button>
 </form>
 
@@ -45,13 +45,16 @@
             document.getElementById("showProducts").style.display = 'block';
             
             productos2.productos.forEach(element => {
-                var td = document.createElement("tr");
-                var t1 = document.createElement("th");
+                let td = document.createElement("tr");
+                let t1 = document.createElement("th");
                 t1.innerText = element.name;
-                var t2 = document.createElement("th");
+                let t2 = document.createElement("th");
                 t2.innerText = element.price;
-                var t3 = document.createElement("th");
-                t3.innerText = element.stock;
+                let t3 = document.createElement("th");
+
+                let imagen = document.createElement("img");
+                imagen.src = element.image;
+                t3.innerHTML = imagen.outerHTML;
 
                 t1.style.border = "1px solid"
                 t2.style.border = "1px solid"

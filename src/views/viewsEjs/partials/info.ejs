@@ -2,12 +2,12 @@
     <table>
         <th style="padding: 5px; border: 3px solid #dddddd; background-color: #61b4e1a3">Nombre</th>
         <th style="padding: 5px; border: 3px solid #dddddd; background-color: #61b4e1a3">Precio</th>
-        <th style="padding: 5px; border: 3px solid #dddddd; background-color: #61b4e1a3">Stock</th>
+        <th style="padding: 5px; border: 3px solid #dddddd; background-color: #61b4e1a3">Imagen</th>
         <% productos.forEach(product => { %>
             <tr>
                     <td style="border: 1px solid"> <%= product.name %></td>
                     <td style="border: 1px solid"> <%= product.price%></td>
-                    <td style="border: 1px solid"> <%= product.stock%></td>
+                    <td style="border: 1px solid"> <img src=<%= product.image%> ></td>
             </tr>
     <% }) %>
         </table>
