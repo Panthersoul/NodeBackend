@@ -18,9 +18,8 @@ router.get('/', (req, res) => {
     res.render('datos.pug', productosApi)
 })
 
-// Devuelvo la plantilla HandleBars
 router.get('/productos', (req, res) => {
-    res.sendFile(join(__dirname,"../views/viewsHandlebars/index.html"), {productos: productosApi.listarAll})
+    res.render('listarProd.pug', productosApi )
 })
 
 router.post('/productos', (req, res) => {    

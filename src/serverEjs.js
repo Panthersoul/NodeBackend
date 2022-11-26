@@ -1,7 +1,5 @@
 import express from "express";
 import routerEjs from "./routes/indexEjs.js";
-import routerHandlebars from "./routes/indexHandlebars.js";
-import routerPug from "./routes/indexPug.js";
 
 
 //Obtengo la ruta absoluta
@@ -11,23 +9,13 @@ const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
 
 
-    //********   Defino routers en funcion del template a usar     */
-//const router = routerEjs; 
-//const router = routerHandlebars;
-const router = routerPug;
-
-const app = express()
-
-///////////////////////// PUG
-app.set('views', __dirname+"/views/viewsPug");
-app.set("view engine", "pug");
-app.use('/', router)
-
+const router = routerEjs; 
+const app = express();
 
 // EJS //////////////////////////////////////////
-// app.set('views', __dirname+"/views/viewsEjs");
-// app.set("view engine", "ejs");
-// app.use('/', router)
+ app.set('views', __dirname+"/views/viewsEjs");
+ app.set("view engine", "ejs");
+ app.use('/', router)
 
 
 const PORT = 8080
