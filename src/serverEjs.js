@@ -11,7 +11,6 @@ const __dirname = dirname(__filename)
 
 const router = routerEjs; 
 const app = express();
-
 // EJS //////////////////////////////////////////
  app.set('views', __dirname+"/views/viewsEjs");
  app.set("view engine", "ejs");
@@ -22,4 +21,5 @@ const PORT = 8080
 const server = app.listen(PORT, () => {
     console.log(`Servidor http escuchando en el puerto ${server.address().port}`)
 })
+
 server.on("error", error => console.log(`Error en servidor ${error}`))
