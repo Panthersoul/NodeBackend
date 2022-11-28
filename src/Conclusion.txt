@@ -1,0 +1,20 @@
+
+Plantilla PUG
+Facil de usar, un tanto simple a la hora de diseñar el caso de uso con etiquetas html e identación por lo que lo siento un poco acotado.
+No tuve problemas con el pasaje de datos.
+Me parece sencilla pero con poca rebustez y para cosas simples.
+
+HandleBars
+Plantilla cómoda para trabajar pero un tanto sofisticada a la hora de pasar parámetros y armar la arquitectura de los componentes HTML.
+Me base en la guia de la pagina del proveedor.
+En mi caso, tuve que utilizar JS para el manejo de datos, por lo que lo veo un poco complejo para algo que podría ser simple. No la elijo.
+
+Plantilla EJS
+De facil uso, y con integración a librerías de manera sencilla.
+Al ser HTML se puede manejar con facilidad y customizar sin grandes problemas aplicando diseño Web básico.
+El hecho de permitir partials, modulariza el sitio permitiendo reutilizar código.  :)
+
+Me resulta muy efectivo, facil y con una gran potencialidad las plantillas EJS para este trabajo. 
+    De hecho, pudo incoporar Bootstrap sin esfuerzo y manejar una iteración e incluir un poco de logica sin ningun tipo de problema.
+
+EJS es la plantilla que prefiero para trabajar.
