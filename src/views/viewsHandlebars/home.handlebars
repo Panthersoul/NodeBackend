@@ -1,33 +1,51 @@
-<h1>Hola soy un Template de HandleBars</h1>
+<div class="container d-flex text-center justify-center flex-column">
 
-<form role="form" action="./productos" method="post">
-    <label for="name">Nombre</label>
-    <input  type="text" id="name" name="name">
-    <label for="price">Precio</label>
-    <input  type="text" id="stock" name="price">
-    <label for="image">URL Imagen</label>
-    <input  type="text" id="image" name="image">
-    <button type="submit">ENVIAR</button>
-</form>
+    <h1>App WebSocket</h1>
 
+<div >
+
+
+    <form role="form" action="./productos" method="post" class="d-flex flex-column  text-center justify-center">
+        <label for="name">Nombre</label>
+        <input  type="text" id="name" name="name">
+        <label for="price">Precio</label>
+        <input  type="text" id="price" name="price">
+        <label for="image">URL Imagen</label>
+        <input  type="text" id="image" name="image">
+        <button type="submit" class="mt-3 btn btn-primary">ENVIAR</button>
+    </form>
+</div>
 <br>
 <hr>
 <br>
 
-    <div >
-        <h2 id="alerta" >No hay productos</h2>
-    </div>
-    <div id="showProducts">
-        <a href="./productos">Mostrar productos en otra vista</a>
-        <br>
-        <table style="margin-top: 10px;" id="tabla">
-            <tr>
-                <th style="padding: 5px; border: 3px solid #dddddd; background-color: #61b4e1a3">Nombre</th>
-                <th style="padding: 5px; border: 3px solid #dddddd; background-color: #61b4e1a3">Precio</th>
-                <th style="padding: 5px; border: 3px solid #dddddd; background-color: #61b4e1a3">Stock</th>
-            </tr>
-        </table>
-    </div>
+        <div >
+            <h2 id="alerta" >No hay productos</h2>
+        </div>
+        <div id="showProducts" class="d-flex flex-column  text-center justify-center">
+            <table style="margin-top: 10px;" id="tabla">
+                <tr>
+                    <th style="padding: 5px; border: 3px solid #dddddd; background-color: #61b4e1a3">Nombre</th>
+                    <th style="padding: 5px; border: 3px solid #dddddd; background-color: #61b4e1a3">Precio</th>
+                    <th style="padding: 5px; border: 3px solid #dddddd; background-color: #61b4e1a3">Stock</th>
+                </tr>
+            </table>
+        </div>
+    <br>
+    <br>
+    <hr>
+
+     <form id="messageForm" class="d-flex flex-column  text-center justify-center">
+        <input id="usernameInput" type="email" placeholder="Nombre de usuario">
+        <input id="messageInput" type="text" placeholder="Mensaje" class="mt-1">
+        <input id="btn-Chat" value="Enviar" class="mt-3 btn btn-primary">
+    </form>
+
+    <ul id="messagePool">
+
+    </ul>
+
+</div>
 
 <script>
     var productos2 = {{{productos}}}
@@ -70,5 +88,6 @@
     }
 </script>
 
+    
 
 
