@@ -21,7 +21,7 @@ messageForm.addEventListener("submit", (event) => {
 console.log("hola");
 
 const enviarMsg = ((event) => {
-    //event.preventDefault();
+    event.preventDefault();
     console.log(event);
 
     const messageInfo = {
@@ -41,4 +41,6 @@ socket.on("server:messages", (messages) => {
     });
 });
 
-btnMessage.addEventListener("click", enviarMsg)
+
+
+messageForm.addEventListener("submit", enviarMsg);

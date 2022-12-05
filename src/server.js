@@ -17,7 +17,7 @@ const expressServer = app.listen(8080, () => {
 
 app.engine('handlebars', engine());
 app.set('view engine', 'handlebars');
-app.set('views', __dirname+"/views/viewsHandlebars/");
+app.set('views', __dirname+"/views/viewsHandlebars");
 app.use('/', routerHandlebars);
 
 const io = new IOServer(expressServer);
