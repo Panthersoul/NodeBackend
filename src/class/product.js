@@ -1,47 +1,102 @@
-class ProductosApi {
-    constructor() {
-        this.productos = []
-        this.id = 0
+import fs from "fs";
+
+
+
+const creandoArchivo = async (fileName) => {
+    try {
+      await fs.promises.writeFile(fileName, "[]");
+    } catch (error) {
+      throw error;
+    }
+  };
+
+const existeArchivo = async (fileName) => {
+    const stats = fs.existsSync(fileName);
+  
+    if (stats == false) {
+      console.log(`Creacion del archivo: ${fileName}`);
+      await creandoArchivo(fileName);
+    }
+  };
+
+class Productos{
+
+    constructor(filename){
+      this.fileName = filename;
     }
 
-    listar(id) {
-        const prod = this.productos.find(prod => prod.id == id)
-        return prod || { error: 'producto no encontrado' }
-    }
 
-    listarAll() {
-        if (this.productos.length > 0){
-            return [...this.productos]
-        }else {
-            return { error: 'No existen productos' }
-        }
-    }
+   async save(producto){
+    try{
+        await existeArchivo(this.fileName);
+    
+        const contenido = JSON.parse(await fs.promises.readFile(this.fileName))
+        let longitud = contenido.length;
+        let index = 0
+        
+            if (longitud == 0) {
+                index = 1;
+              } else {
+                index = contenido[longitud - 1].id + 1;
+              }
+            
+            producto.id = index
+            contenido.push(producto)
+            await fs.promises.writeFile(this.fileName, JSON.stringify(contenido));
+            return producto.id
 
-    guardar(prod) {
-        const newProd = { ...prod, id: ++this.id }
-        this.productos.push(newProd)
-        return newProd
-    }
+    }catch(error){
+        throw error
+    }  
+   }
 
-    actualizar(prod, id) {
-        const newProd = { id: Number(id), ...prod }
-        const index = this.productos.findIndex(p => p.id == id)
-        if (index !== -1) {
-            this.productos[index] = newProd
-            return newProd
-        } else {
-            return { error: 'producto no encontrado' }
-        }
-    }
+    async getById(id){
+       try{
+        const contenido = await fs.promises.readFile(this.fileName)
+        const objeto = JSON.parse(contenido)
 
-    borrar(id) {
-        const index = this.productos.findIndex(prod => prod.id == id)
-        if (index !== -1) {
-            return this.productos.splice(index, 1)
-        } else {
-            return { error: 'producto no encontrado' }
-        }
+        let objetoId = objeto.find((x) => x.id == id) || null;
+        
+        return objetoId;
+        
+       }catch(error){
+            throw error
+       }
+   }
+
+async getAll(){
+    try{
+        await existeArchivo(this.fileName)
+
+        const contenidoCrudo = await fs.promises.readFile(this.fileName)
+        const contenido = JSON.parse(contenidoCrudo)
+        return contenido;
+    }catch(error){
+        console.log("Error en getAll: ", error)
+        return [];
     }
+   }
+
+   
+   async deleteById(id){
+       try{
+        const contenido = await fs.promises.readFile(this.fileName)
+        const contenidoParseado = JSON.parse(contenido)
+        
+        let arrayFiltrado = contenidoParseado.filter((x) => x.id !== id)
+    
+        await fs.promises.writeFile(this.fileName, JSON.stringify(arrayFiltrado))
+    
+       }catch(error){
+        throw error
+       }
+   }
+   async deleteAll(){
+       await creandoArchivo(this.fileName)
+   }
 }
 
-export default ProductosApi
+
+
+export default Productos;
+
