@@ -13,6 +13,9 @@ app.use('/', router);
 app.use('/api/productos', routerProd);
 app.use('/api/cart', routerCart);
 
+app.use(express.json())
+app.use(express.urlencoded({extended:true}));
+
 app.listen(8080, () => {
     console.log("Server listening in port 8080")
 })

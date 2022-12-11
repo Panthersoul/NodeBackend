@@ -52,12 +52,16 @@ class Productos{
 
     async getById(id){
        try{
+
         const contenido = await fs.promises.readFile(this.fileName)
         const objeto = JSON.parse(contenido)
+        let productoReturn = "undefined";
 
-        let objetoId = objeto.find((x) => x.id == id) || null;
-        
-        return objetoId;
+        objeto.forEach(element => {
+          if (element.id == id) { productoReturn = element; }
+        });
+
+        return productoReturn;
         
        }catch(error){
             throw error
@@ -67,7 +71,6 @@ class Productos{
 async getAll(){
     try{
         await existeArchivo(this.fileName)
-
         const contenidoCrudo = await fs.promises.readFile(this.fileName)
         const contenido = JSON.parse(contenidoCrudo)
         return contenido;
@@ -77,22 +80,52 @@ async getAll(){
     }
    }
 
+   async modifyById(id, producto){
+     await existeArchivo(this.fileName);
+
+     const contenido = await fs.promises.readFile(this.fileName)
+     const objeto = JSON.parse(contenido)
+
+     objeto.forEach(element => {
+      console.log("ffff "+element.id);
+       if (element.id == JSON.stringify(id)) { 
+        console.log("estoy "+JSON.stringify(element));
+              element.timestamp = Date.now();
+              element.nombre = producto.nombre;
+              element.descripcion = producto.descripcion;
+              element.código = producto.codigo;
+              element.foto = producto.foto;
+              element.precio = producto.stock;
+              element.stock = producto.stock;
+        }
+        else{
+          throw new Error("No existe el producto con ese ID")
+        }
+     });
+
+     let obj = await fs.promises.writeFile(this.fileName, JSON.stringify(objeto));
+     
+     return objeto;
+
+   }
    
    async deleteById(id){
        try{
         const contenido = await fs.promises.readFile(this.fileName)
         const contenidoParseado = JSON.parse(contenido)
+        let arrayFiltrado = contenidoParseado.filter((x) => x.id !== Number(id))
         
-        let arrayFiltrado = contenidoParseado.filter((x) => x.id !== id)
-    
-        await fs.promises.writeFile(this.fileName, JSON.stringify(arrayFiltrado))
+        await fs.promises.writeFile(this.fileName, JSON.stringify(arrayFiltrado));
+        return "Borrado"
     
        }catch(error){
         throw error
        }
    }
+
    async deleteAll(){
        await creandoArchivo(this.fileName)
+
    }
 }
 

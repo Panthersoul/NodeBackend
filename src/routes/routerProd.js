@@ -14,7 +14,6 @@ routerProd.get('/',(req,res) => {
         const mostrarProductos = async () => {
         try{
             const data = await prods.getAll(prods.fileName);
-            console.log( ...data);
             res.json(JSON.stringify(data))
         }catch(error){
             throw new Error(error)
@@ -26,12 +25,9 @@ routerProd.get('/',(req,res) => {
 routerProd.get('/:id', (req, res) => {
     const traerProductos = async () => {
         try{
-            if(req.query.admin){
-                const data = prods.getById(req.query.id)
+                const data = await prods.getById(req.params.id)               
                 return res.json(data);
-            }else{
-                throw new Error ("Acceso denegado, no tiene permisos.")
-            }
+            
         }catch(error){
             throw new Error(error)
         }
@@ -42,18 +38,55 @@ routerProd.get('/:id', (req, res) => {
 
 routerProd.post('/',(req,res) => {    
     const agregarProducto = async() => {
-        try{
-            
-            console.log("sdfgs"+req.query);
-            const objetoNuevo = req.query
-            
+        try{            
+            const objetoNuevo = req.query;
+            if (req.query.admin == "true"){
             await prods.save(objetoNuevo)
-            res.redirect("/") 
+                return res.json("agregado")
+            }
+            else{
+                return res.json("No tiene permisos")
+            }
         }catch(error){
             throw new Error(error)
         }
     }
     agregarProducto()
+})
+
+routerProd.put('/:id', (req,res) => {    
+    const modificarProducto = async() => {
+        try{
+            
+            const id = req.params.id;
+            if (req.query.admin == "true"){
+            await prods.modifyById(Number(id), req.query)
+                return res.json("Se ha modificado.")
+            }
+            else{
+                return res.json("No tiene permisos")
+            }
+        }catch(error){
+            throw new Error(error)
+        }
+    }
+    modificarProducto()
+})
+
+
+routerProd.delete('/:id', (req, res) => {
+    const borrarProductos = async () => {
+        try{
+            if (req.query.admin == "true"){
+                const data = await prods.deleteById(req.params.id)               
+            }else{
+                return res.json("No tiene permisos")
+            }
+        }catch(error){
+            throw new Error(error)
+        }
+    };
+    borrarProductos()
 })
 
 
