@@ -1,6 +1,7 @@
-import { Router } from "express";
+import express, { Router } from "express";
 import { dirname, join } from "path";
 import { fileURLToPath } from "url";
+import moment from 'moment';
 
 import Productos from "../class/product.js";
 
@@ -9,6 +10,8 @@ const prods = new Productos("./productos.txt");
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const routerProd = Router();
 
+routerProd.use(express.json());
+routerProd.use(express.urlencoded({ extended: true }))
 
 routerProd.get('/',(req,res) => {   
         const mostrarProductos = async () => {
@@ -38,9 +41,14 @@ routerProd.get('/:id', (req, res) => {
 
 routerProd.post('/',(req,res) => {    
     const agregarProducto = async() => {
-        try{            
-            const objetoNuevo = req.query;
-            if (req.query.admin == "true"){
+        try{
+            let objetoNuevo = req.body;
+            objetoNuevo = {
+                timestamp: moment.now(),
+                ...objetoNuevo
+            }
+            console.log(objetoNuevo);
+            if (req.body.admin == "true"){
             await prods.save(objetoNuevo)
                 return res.json("agregado")
             }
@@ -59,6 +67,7 @@ routerProd.put('/:id', (req,res) => {
         try{
             
             const id = req.params.id;
+
             if (req.query.admin == "true"){
             await prods.modifyById(Number(id), req.query)
                 return res.json("Se ha modificado.")

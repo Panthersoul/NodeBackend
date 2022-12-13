@@ -7,14 +7,15 @@ import routerProd from "./routes/routerProd.js";
 import routerCart from "./routes/routerCart.js";
 
 const app = express();
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = dirname(__filename)
 
 
-app.use('/', router);
+app.use(express.static(__dirname + "/public"))
 app.use('/api/productos', routerProd);
 app.use('/api/cart', routerCart);
-
 app.use(express.json())
-app.use(express.urlencoded({extended:true}));
+app.use(express.urlencoded({extended: true}));
 
 app.listen(8080, () => {
     console.log("Server listening in port 8080")
