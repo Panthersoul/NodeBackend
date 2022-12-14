@@ -248,12 +248,15 @@
                  producto = result;
                 })
 
+                producto.id = JSON.stringify(producto.id)
+
                 
                 let url = './api/carrito/';
-                
-                    await fetch(url + cart.id + '/productos?admin=true', {
+                console.log("fff"+JSON.stringify(producto));
+                console.log(producto);
+                    await fetch(url + cart.id + '/productos', {
                       method: 'POST',
-                      body: JSON.parse(`${producto}`)
+                      body: JSON.stringify(producto)
                     })
                     .then((response) => response.json())
                     .then((result) => 

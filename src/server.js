@@ -17,6 +17,8 @@ app.use('/api/carrito', routerCart);
 app.use(express.json())
 app.use(express.urlencoded({extended: true}));
 
+//const PORT = process.env.PORT || 8080
+
 app.listen(8080, () => {
     console.log("Server listening in port 8080")
 })

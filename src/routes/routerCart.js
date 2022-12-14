@@ -32,8 +32,8 @@ routerCart.post('/:id/productos',(req,res) => {
     const crearCarrito = async() => {
         try{
             
-            console.log("fjjfjfj"+JSON.stringify(req.body))
-            
+            console.log("fjjfjfj"+JSON.stringify(req.query))
+            console.log(req.body);
             console.log("sd"+JSON.stringify(req.params))
             
             let respuesta = await carrito.addProductsToCart(req.params, req.body)

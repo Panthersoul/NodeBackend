@@ -64,10 +64,7 @@ class Carro{
           if (Number(element.id) == idCarro) { 
               element.productos.push(JSON.stringify(product));
               console.log(element);
-            //element.productos.push(product);
             }
-
-        
      });
 
      await fs.promises.writeFile(this.fileName, JSON.stringify(contenido));
