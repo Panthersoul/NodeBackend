@@ -5,14 +5,15 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- CSS only -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
     <link rel="stylesheet" href="../style.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    
     <title>App CoherHouse</title>
 </head>
 <body>
     <nav class="navbar navbar-expand-lg bg-light">
         <div class="container-fluid">
-          <a class="navbar-brand" href="index.html">CODERHOUSE</a>
+          <a class="navbar-brand" href="/">CODERHOUSE</a>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
           </button>
@@ -22,15 +23,17 @@
                 <a class="nav-link active" aria-current="page" href="#"></a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="#"></a>
+                <a class="nav-link" href="#">ADMIN
+                  <input type="checkbox" id="admin" name="admin" value="True">
+                </a>
               </li>
               <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                   Acciones
                 </a>
                 <ul class="dropdown-menu">
-                  <li><a class="dropdown-item" href="./pages/addProduct.html">Agregar un producto</a></li>
-                  <li><a class="dropdown-item" href="#">Listar Productos</a></li>
+                  <li><a class="dropdown-item" href="./productos">Agregar un producto</a></li>
+                  <li><a class="dropdown-item" href="./list">Listar Productos</a></li>
                   <li><a class="dropdown-item" href="#">Editar Productos</a></li>
                   <li><hr class="dropdown-divider"></li>
                   <li><a class="dropdown-item" href="#">Carrito</a></li>
@@ -46,14 +49,232 @@
     <div class="container d-flex justify-content-center flex-column text-center mb-3">
         <h3>Listado de productos actuales</h3>
     </div>
-    <div class="container d-flex justify-content-center flex-column">
+    <div id="contenedor" class="container d-flex justify-content-center ">
        
     </div>
-    
+        <!-- Modal -->
+      <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="exampleModalLabel">Edición del Producto</h1>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                    <form id="productsForm" method="PUT" action="./api/productos/">
+                      
+                      <div class="mb-3">
+                        <label for="nombreProducto" class="form-label">Nombre</label>
+                        <input type="text" class="form-control" name="nombreProducto" id="nombreProducto" aria-describedby="nameHelp" required>
+                      </div>
+                      <div class="mb-3">
+                        <label for="descripcionProducto" class="form-label">Descripcion</label>
+                        <input type="text" class="form-control" name="descripcionProducto" id="descripcionProducto" required>
+                      </div>
+                      <div class="mb-3">
+                          <label for="codigoProducto" class="form-label">Codigo</label>
+                          <input type="text" class="form-control" id="codigoProducto" name="codigoProducto" required>
+                        </div>
+                        <div class="mb-3">
+                          <label for="urlFotoProducto" class="form-label">Foto URL</label>
+                          <input type="text" class="form-control" id="foto" name="urlFotoProducto" required>
+                          <div id="fotoHelp" class="form-text">Agregue aquí la URL de la imagen de producto.</div>
+                          <div id="fotoHelp1" class="form-text">Ej: https://cdn1.iconfinder.com/data/icons/space-flat-galaxy-radio/512/planets-64.png</div>
+                        </div>
+                        <div class="mb-3">
+                          <label for="precioProducto" class="form-label">Precio</label>
+                          <input type="number" class="form-control" id="precio" name="precioProducto" required>
+                        </div>
+                        <div class="mb-3">
+                          <label for="stockProducto" class="form-label">Stock</label>
+                          <input type="number" class="form-control" id="stock" name="stockProducto" required>
+                        </div>
+                        <input type="text" value="true" id="idModal" name="admin" style="display: none">
+                        <input type="text" value="true" name="admin" style="display: none">
+                        <button type="submit" class="btn btn-primary">Modificar</button>
+                    </form>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+            </div>
+          </div>
+        </div>
+      </div>
     
 
     <!-- JavaScript Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
+    <script >
+          async function getProds() {
+            let url = './api/productos';
+              try {
+                      let res = await fetch(url);
+                      return await res.json();
+                  } catch (error) {
+                      console.log(error);
+                  }
+              }
+
+            async function createCart()  {
+
+              if (!localStorage.getItem("cart")){
+              let url = './api/carrito/';
+                  await fetch(url, {
+                  method: 'POST'
+                  })
+                .then((response) => response.json())
+                .then((result) => 
+                {
+                  if (!localStorage.getItem("cart")){
+                  localStorage.setItem('cart', JSON.stringify(result));
+                   }
+                })
+              }
+            }
+
+            createCart();
+
+              async function renderProds() {
+                  let prods = await getProds();
+                  let listado = JSON.parse(prods);
+                  
+                  if (listado.length == 0){
+                    alert("No hay productos para listar")
+                  }
+                  let html = '';
+                  listado.forEach(producto => {
+                      let htmlSegment = `<div style="max-width:200px;" class="card m-3" >
+                                         <img class="card-img-top" style="max-width: 200px" src="${producto.urlFotoProducto}" />
+                                          <div class="card-body">
+                                            <h2>${producto.nombreProducto}</h2>
+                                            <span><strong>Descripcion: </strong>${producto.descripcionProducto}</span><br>
+                                            <span><strong>Código: </strong>${producto.codigoProducto}</span><br>
+                                            <span><strong>Precio: </strong>$${producto.precioProducto}</span>
+                                            <p><strong> Stock Disponible: </strong> ${producto.stockProducto}</p>
+                                            <a href="#" onclick="agregarCarrito(${producto.id})" class="btn btn-primary">Agregar al Carrito</a>
+                                            <hr>
+                                            <button type="button" onclick="actualizar(${producto.id})"  class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                                              Actualizar
+                                            </button>
+
+                                            <a href="#" onclick="eliminar(${producto.id})" class="btn btn-terciary">Eliminar</a>
+                                          </div>
+                                      </div>`;
+                      html += htmlSegment;
+                  });
+
+                  let container = document.getElementById('contenedor');
+                  container.innerHTML = html;
+              }
+
+              async function eliminar(id){
+                if (soyAdmin.checked){
+                    let url = './api/productos/';
+                    await fetch(url + id + '?admin=true', {
+                      method: 'DELETE'
+                    }).then(response => alert("Eliminado: "+response.json));
+                  
+                }else{
+                  alert("Usted no es administrador para realizar esta acción.")
+                }
+              }
+
+              let nombre = document.getElementById("nombreProducto");
+                      let descr = document.getElementById("descripcionProducto");
+                      let codigo = document.getElementById("codigoProducto");
+                      let foto = document.getElementById("foto");
+                      let precio = document.getElementById("precio");
+                      let stock = document.getElementById("stock");
+                      let idModal = document.getElementById("idModal");
+
+
+
+              async function actualizar(id){
+
+                let url = './api/productos';
+                try {
+                  console.log(url+'/'+id);
+                      let res = await fetch(url+'/'+id);
+                      let arti = await res.json();
+                     /* 
+                      let nombre = document.getElementById("nombreProducto");
+                      let descr = document.getElementById("descripcionProducto");
+                      let codigo = document.getElementById("codigoProducto");
+                      let foto = document.getElementById("foto");
+                      let precio = document.getElementById("precio");
+                      let stock = document.getElementById("stock");
+                      let idModal = document.getElementById("idModal");*/
+
+                      nombre.value = arti.nombreProducto;
+                      descr.value = arti.descripcionProducto;
+                      codigo.value = arti.codigoProducto;
+                      foto.value = arti.urlFotoProducto;
+                      precio.value = arti.precioProducto;
+                      stock.value = arti.stockProducto;
+                      admin.value = arti.admin;
+                      
+                      document.getElementById("productsForm").action = './api/productos/'+id+'?';
+                      
+                  } catch (error) {
+                      console.log(error);
+                  }
+                            
+//                if (soyAdmin.checked){
+                  /*if (2+2){
+                  let url = './api/productos/';
+                    await fetch(url + id + '?admin=true', {
+                      method: 'PUT'
+                    }).then(response => alert("Eliminado: "+response.json)); 
+                }else{
+                  alert("Usted no es administrador para realizar esta acción.")
+                }*/
+              }
+            
+
+              async function agregarCarrito (id){
+
+                let idCart = JSON.parse(localStorage.getItem("cart"))
+                let cart=JSON.parse(idCart);
+                console.log(cart.id);
+                let producto;
+
+                let url1 = './api/productos/';
+                  await fetch(url1+id, {
+                  method: 'GET'
+                  })
+                .then((response) => response.json())
+                .then((result) => 
+                {
+                 producto = result;
+                })
+
+                
+                let url = './api/carrito/';
+                
+                    await fetch(url + cart.id + '/productos?admin=true', {
+                      method: 'POST',
+                      body: JSON.parse(`${producto}`)
+                    })
+                    .then((response) => response.json())
+                    .then((result) => 
+                    {
+                      //console.log(result);
+                      //localStorage.setItem('cart', JSON.stringify(result));
+                    })
+                    
+                    //.then(response => alert("Agregado al carrito: "+response.json)); 
+                }
+              
+              
+
+
+              (function () {
+                  renderProds();
+              })();
+
+              let soyAdmin = document.getElementById("admin");
+    </script>
+
     
 </body>
 </html>

@@ -1,3 +1,4 @@
+import { Console } from "console";
 import fs from "fs";
 
 
@@ -28,8 +29,8 @@ class Carro{
    async save(carro){
     try{
         await existeArchivo(this.fileName);
-    
         const contenido = JSON.parse(await fs.promises.readFile(this.fileName))
+        
         let longitud = contenido.length;
         let index = 0
         
@@ -39,15 +40,43 @@ class Carro{
                 index = contenido[longitud - 1].id + 1;
               }
             
-            carro.id = index
-            contenido.push(carro)
+            carro.id = index;
+            contenido.push(carro);
+            
             await fs.promises.writeFile(this.fileName, JSON.stringify(contenido));
             return carro.id
-
+  
     }catch(error){
         throw error
     }  
    }
+
+   async addProductsToCart(id, product){
+    try {
+        
+
+        console.log("producto :"+ JSON.stringify(product));
+        const contenido = JSON.parse(await fs.promises.readFile(this.fileName))
+
+        contenido.forEach(element => {
+          let idCarro = Number(id.id);
+          
+          if (Number(element.id) == idCarro) { 
+              element.productos.push(JSON.stringify(product));
+              console.log(element);
+            //element.productos.push(product);
+            }
+
+        
+     });
+
+     await fs.promises.writeFile(this.fileName, JSON.stringify(contenido));
+
+    }catch(error){
+      throw error
+    }
+  }
+
 
     async getById(id){
        try{
@@ -110,13 +139,12 @@ async getAll(){
    
    async deleteById(id){
        try{
-        const contenido = await fs.promises.readFile(this.fileName)
-        const contenidoParseado = JSON.parse(contenido)
-        let arrayFiltrado = contenidoParseado.filter((x) => x.id !== Number(id))
-        
-        await fs.promises.writeFile(this.fileName, JSON.stringify(arrayFiltrado));
-        return "Borrado"
-    
+          const contenido = await fs.promises.readFile(this.fileName)
+          const contenidoParseado = JSON.parse(contenido)
+          let arrayFiltrado = contenidoParseado.filter((x) => x.id !== Number(id))
+          console.log(arrayFiltrado);
+          await fs.promises.writeFile(this.fileName, JSON.stringify(arrayFiltrado));
+          return "Borrado"
        }catch(error){
         throw error
        }

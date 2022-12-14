@@ -10,10 +10,10 @@ const app = express();
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
 
-
-app.use(express.static(__dirname + "/public"))
+//app.use(express.static(__dirname + "/public"))
+app.use('/', router);
 app.use('/api/productos', routerProd);
-app.use('/api/cart', routerCart);
+app.use('/api/carrito', routerCart);
 app.use(express.json())
 app.use(express.urlencoded({extended: true}));
 

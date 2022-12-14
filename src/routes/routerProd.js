@@ -17,6 +17,7 @@ routerProd.get('/',(req,res) => {
         const mostrarProductos = async () => {
         try{
             const data = await prods.getAll(prods.fileName);
+            
             res.json(JSON.stringify(data))
         }catch(error){
             throw new Error(error)
@@ -66,6 +67,9 @@ routerProd.put('/:id', (req,res) => {
     const modificarProducto = async() => {
         try{
             
+            console.log(req.query);
+            console.log(req.params);
+            console.log(req.body);
             const id = req.params.id;
 
             if (req.query.admin == "true"){
