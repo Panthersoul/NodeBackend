@@ -83,8 +83,9 @@ routerCart.delete('/:id', (req, red) => {
 routerCart.delete('/:id/productos/:id_prod', (req, res) => {
     const eliminarCarrito = async() => {
         try{
-            console.log(req.params);
-            //let respuesta = await carrito.deleteById(req.params.id)
+            console.log(req.params, req.params.id_prod);
+            let respuesta = await carrito.deleteProductsFromCart(req.params.id, req.params.id_prod)
+            return res.json(respuesta);
         }catch(error){
             throw new Error(error)
         }

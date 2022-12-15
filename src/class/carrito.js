@@ -107,14 +107,10 @@ async getAll(){
 
    async modifyById(id, producto){
      await existeArchivo(this.fileName);
-
      const contenido = await fs.promises.readFile(this.fileName)
      const objeto = JSON.parse(contenido)
-
      objeto.forEach(element => {
-      console.log("ffff "+element.id);
        if (element.id == JSON.stringify(id)) { 
-        console.log("estoy "+JSON.stringify(element));
               element.timestamp = Date.now();
               element.nombre = producto.nombre;
               element.descripcion = producto.descripcion;
@@ -139,7 +135,7 @@ async getAll(){
           const contenido = await fs.promises.readFile(this.fileName)
           const contenidoParseado = JSON.parse(contenido)
           let arrayFiltrado = contenidoParseado.filter((x) => x.id !== Number(id))
-          console.log(arrayFiltrado);
+          console.log("Delete cart by ID" + arrayFiltrado);
           await fs.promises.writeFile(this.fileName, JSON.stringify(arrayFiltrado));
           return "Borrado"
        }catch(error){
@@ -147,6 +143,28 @@ async getAll(){
        }
    }
 
+   async deleteProductsFromCart(id, idProduct){
+    try {
+      const contenido = await fs.promises.readFile(this.fileName);
+      const contenidoParseado = JSON.parse(contenido);
+      let quitar = "undefined";
+        
+        
+      let arrais = "undefinded";
+      let resultado = "undefined";
+        contenidoParseado.forEach((element) => {
+            if (element.id == Number(id)){
+              arrais = element.productos.filter((x) => x.id !== id)
+              resultado = arrais.filter((y) =>  JSON.parse(y).id !== idProduct );
+              element.productos = resultado;
+            }
+          })
+      await fs.promises.writeFile(this.fileName, JSON.stringify(contenidoParseado));
+      return "borrado"
+    }catch(error){
+      throw error
+    }
+  }
    async deleteAll(){
        await creandoArchivo(this.fileName)
 

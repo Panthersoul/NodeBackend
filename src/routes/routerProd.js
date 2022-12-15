@@ -88,7 +88,8 @@ routerProd.delete('/:id', (req, res) => {
     const borrarProductos = async () => {
         try{
             if (req.query.admin == "true"){
-                const data = await prods.deleteById(req.params.id)               
+                const data = await prods.deleteById(req.params.id)          
+                return res.json(data);
             }else{
                 return res.json("No tiene permisos")
             }

@@ -131,12 +131,16 @@
               
             }
 
-
-            if (!localStorage.getItem("cart")){
-              createCart();
-            }
+            console.log(!localStorage.getItem("cart"));
+     
 
               async function renderProds() {
+
+
+                if (!localStorage.getItem("cart")){
+                  createCart();
+                  }
+
                   let prods = await getProds();
                   let listado = JSON.parse(prods);
                   
