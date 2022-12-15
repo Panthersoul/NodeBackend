@@ -118,17 +118,22 @@
             let soyAdmin = document.getElementById("admin");
             let valorIDCart = JSON.parse(localStorage.getItem("cart"));
             valorIDCart = JSON.parse(valorIDCart);
+            window.location.reload();
             if (soyAdmin.checked){
               let url = './api/carrito/';
               console.log(url + valorIDCart.id +"/productos/"+id+"?admin=true");
                 
                 await fetch(url + valorIDCart.id +"/productos/"+id+"?admin=true", {
                   "method": 'DELETE'
-                }).then(response => alert("Eliminado: "+response.json));
+                }).then(response => JSON.parse(response)).
+                then(res => {
+                  console.log(res);
+                })
               
             }else{
               alert("Usted no es administrador para realizar esta acción.")
             }
+            
           }
 
 
