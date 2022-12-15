@@ -25,5 +25,8 @@ router.get('/productos', (req, res) => {
 router.get('/list', (req, res) => {
     res.sendFile(path.join(__dirname,'../public/pages/listProducts.html'));
 })
+router.get('/cart', (req, res) => {
+    res.sendFile(path.join(__dirname,'../public/pages/cart.html'));
+})
 
 export default router;

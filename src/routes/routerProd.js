@@ -4,6 +4,7 @@ import { fileURLToPath } from "url";
 import moment from 'moment';
 
 import Productos from "../class/product.js";
+import { Console } from "console";
 
 const prods = new Productos("./productos.txt");
 
@@ -28,7 +29,7 @@ routerProd.get('/',(req,res) => {
 
 routerProd.get('/:id', (req, res) => {
     const traerProductos = async () => {
-        try{
+        try{            
                 const data = await prods.getById(req.params.id)               
                 return res.json(data);
             
@@ -51,7 +52,9 @@ routerProd.post('/',(req,res) => {
             console.log(objetoNuevo);
             if (req.body.admin == "true"){
             await prods.save(objetoNuevo)
-                return res.json("agregado")
+
+                //return res.json("agregado")
+                return res.redirect('/productos')
             }
             else{
                 return res.json("No tiene permisos")
@@ -66,15 +69,9 @@ routerProd.post('/',(req,res) => {
 routerProd.put('/:id', (req,res) => {    
     const modificarProducto = async() => {
         try{
-            
-            console.log(req.query);
-            console.log(req.params);
-            console.log(req.body);
-            const id = req.params.id;
-
-            if (req.query.admin == "true"){
-            await prods.modifyById(Number(id), req.query)
-                return res.json("Se ha modificado.")
+            if (req.body.admin == "true"){
+            await prods.modifyById(JSON.stringify(req.body))
+            return res.json("Se ha modificado.")
             }
             else{
                 return res.json("No tiene permisos")

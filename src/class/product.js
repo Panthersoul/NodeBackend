@@ -80,30 +80,35 @@ async getAll(){
     }
    }
 
-   async modifyById(id, producto){
+   async modifyById(producto){
+  
      await existeArchivo(this.fileName);
 
      const contenido = await fs.promises.readFile(this.fileName)
-     const objeto = JSON.parse(contenido)
+     const objeto = JSON.parse(contenido);
+     const produ = JSON.parse(producto);
 
-     objeto.forEach(element => {
-      console.log("ffff "+element.id);
-       if (element.id == JSON.stringify(id)) { 
-        console.log("estoy "+JSON.stringify(element));
+     console.log(produ);
+     
+    
+
+    objeto.forEach(element => {
+       if (element.id == produ.id) { 
               element.timestamp = Date.now();
-              element.nombre = producto.nombre;
-              element.descripcion = producto.descripcion;
-              element.código = producto.codigo;
-              element.foto = producto.foto;
-              element.precio = producto.stock;
-              element.stock = producto.stock;
+              element.nombreProducto = produ.nombreProducto;
+              element.descripcionProducto = produ.descripcionProducto;
+              element.codigoProducto = produ.codigoProducto;
+              element.urlFotoProducto = produ.urlFotoProducto;
+              element.precioProducto = produ.precioProducto;
+              element.stockProducto = produ.stockProducto;
         }
         else{
-          throw new Error("No existe el producto con ese ID")
+          console.log("no entre al if");
         }
      });
 
-     let obj = await fs.promises.writeFile(this.fileName, JSON.stringify(objeto));
+     
+     await fs.promises.writeFile(this.fileName, JSON.stringify(objeto));
      
      return objeto;
 

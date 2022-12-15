@@ -1,12 +1,13 @@
 import express, { Router } from "express";
+import moment from 'moment';
+import Carrito from "../class/carrito.js";
+
 
 const routerCart = Router();
 /*Importante para recibir por BODY lo del POST*/
 routerCart.use(express.json());
 routerCart.use(express.urlencoded({ extended: true }))
-import moment from 'moment';
 
-import Carrito from "../class/carrito.js";
 
 const carrito = new Carrito("./carrito.txt");
 
@@ -28,13 +29,31 @@ routerCart.post('/',(req,res) => {
     crearCarrito()
 })
 
-routerCart.post('/:id/productos',(req,res) => {    
+routerCart.get('/:id/productos',(req,res) => {    
+    const enviarProds = async() => {
+
+        
+        console.log(req.params);
+        try{
+            
+            let a = await carrito.getById(req.params.id);
+            
+            return res.json(a);
+        }catch(error){
+            throw new Error(error)
+        }
+    }
+    enviarProds()
+})
+
+
+routerCart.post('/:id/productos',(req, res) => {    
     const crearCarrito = async() => {
         try{
             
-            console.log("fjjfjfj"+JSON.stringify(req.query))
-            console.log(req.body);
-            console.log("sd"+JSON.stringify(req.params))
+            console.log("Query en el request: "+JSON.stringify(req.query))
+            console.log(JSON.stringify(req.body));
+            console.log("Parametro en el request: "+JSON.stringify(req.params))
             
             let respuesta = await carrito.addProductsToCart(req.params, req.body)
             return res.json(respuesta);

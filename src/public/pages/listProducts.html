@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- CSS only -->
-    <link rel="stylesheet" href="../style.css">
+    
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
     
     <title>App CoherHouse</title>
@@ -34,9 +34,8 @@
                 <ul class="dropdown-menu">
                   <li><a class="dropdown-item" href="./productos">Agregar un producto</a></li>
                   <li><a class="dropdown-item" href="./list">Listar Productos</a></li>
-                  <li><a class="dropdown-item" href="#">Editar Productos</a></li>
                   <li><hr class="dropdown-divider"></li>
-                  <li><a class="dropdown-item" href="#">Carrito</a></li>
+                  <li><a class="dropdown-item" href="./cart">Carrito</a></li>
                 </ul>
               </li>
             </ul>
@@ -61,7 +60,7 @@
               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                    <form id="productsForm" method="PUT" action="./api/productos/">
+                    <form id="productsForm" action="./" >
                       
                       <div class="mb-3">
                         <label for="nombreProducto" class="form-label">Nombre</label>
@@ -89,9 +88,9 @@
                           <label for="stockProducto" class="form-label">Stock</label>
                           <input type="number" class="form-control" id="stock" name="stockProducto" required>
                         </div>
-                        <input type="text" value="true" id="idModal" name="admin" style="display: none">
+                        <input type="text" id="idModal" name="idModal" style="display: none">
                         <input type="text" value="true" name="admin" style="display: none">
-                        <button type="submit" class="btn btn-primary">Modificar</button>
+                        <button  type="submit" onclick="actualizar()" id="btnModificarModal" class="btn btn-primary">Modificar</button>
                     </form>
             </div>
             <div class="modal-footer">
@@ -117,7 +116,7 @@
 
             async function createCart()  {
 
-              if (!localStorage.getItem("cart")){
+              
               let url = './api/carrito/';
                   await fetch(url, {
                   method: 'POST'
@@ -129,10 +128,13 @@
                   localStorage.setItem('cart', JSON.stringify(result));
                    }
                 })
-              }
+              
             }
 
-            createCart();
+
+            if (!localStorage.getItem("cart")){
+              createCart();
+            }
 
               async function renderProds() {
                   let prods = await getProds();
@@ -153,11 +155,11 @@
                                             <p><strong> Stock Disponible: </strong> ${producto.stockProducto}</p>
                                             <a href="#" onclick="agregarCarrito(${producto.id})" class="btn btn-primary">Agregar al Carrito</a>
                                             <hr>
-                                            <button type="button" onclick="actualizar(${producto.id})"  class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                                            <button type="button" onclick="actualizarIdModal(${producto.id})"  class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#exampleModal">
                                               Actualizar
                                             </button>
 
-                                            <a href="#" onclick="eliminar(${producto.id})" class="btn btn-terciary">Eliminar</a>
+                                            <a href="#" onclick="eliminar(${producto.id})" class="mt-2 btn btn-danger">Eliminar</a>
                                           </div>
                                       </div>`;
                       html += htmlSegment;
@@ -180,31 +182,27 @@
               }
 
               let nombre = document.getElementById("nombreProducto");
-                      let descr = document.getElementById("descripcionProducto");
-                      let codigo = document.getElementById("codigoProducto");
-                      let foto = document.getElementById("foto");
-                      let precio = document.getElementById("precio");
-                      let stock = document.getElementById("stock");
-                      let idModal = document.getElementById("idModal");
-
-
-
-              async function actualizar(id){
-
+              let descr = document.getElementById("descripcionProducto");
+              let codigo = document.getElementById("codigoProducto");
+              let foto = document.getElementById("foto");
+              let precio = document.getElementById("precio");
+              let stock = document.getElementById("stock");
+              let idModal = document.getElementById("idModal");
+              
+             async function actualizarIdModal(id){
                 let url = './api/productos';
                 try {
-                  console.log(url+'/'+id);
-                      let res = await fetch(url+'/'+id);
-                      let arti = await res.json();
-                     /* 
-                      let nombre = document.getElementById("nombreProducto");
-                      let descr = document.getElementById("descripcionProducto");
-                      let codigo = document.getElementById("codigoProducto");
-                      let foto = document.getElementById("foto");
-                      let precio = document.getElementById("precio");
-                      let stock = document.getElementById("stock");
-                      let idModal = document.getElementById("idModal");*/
+                      let url1 = './api/productos';
+                      await fetch(url+'/'+id, {
+                          method: 'GET'
+                          })
+                        .then((response) => response.json())
+                        .then((result) => 
+                        {
+                          arti = result;
+                        })
 
+                      idModal.value = id;
                       nombre.value = arti.nombreProducto;
                       descr.value = arti.descripcionProducto;
                       codigo.value = arti.codigoProducto;
@@ -212,22 +210,51 @@
                       precio.value = arti.precioProducto;
                       stock.value = arti.stockProducto;
                       admin.value = arti.admin;
-                      
-                      document.getElementById("productsForm").action = './api/productos/'+id+'?';
-                      
+
+              }catch (error) {
+                      console.log(error);
+                  }
+                }
+            
+
+              async function actualizar(){
+                //e.preventDefault();
+                let id = document.getElementById("idModal")
+                
+                id = id.value;
+                try{
+                  let cuerpo = {
+                          "nombreProducto": nombre.value,
+                          "descripcionProducto": descr.value,
+                          "codigoProducto": codigo.value,
+                          "urlFotoProducto": foto.value,
+                          "precioProducto": precio.value,
+                          "stockProducto": stock.value,
+                          "id": id,
+                          "admin": JSON.stringify(true)
+
+                  }
+
+                    if (admin.value === "true"){
+                    let url = './api/productos/';
+                    console.log(url + id +"/?admin=true");
+                      await fetch(url + id, {
+                        "method": 'PUT',
+                        "headers": {
+                            "Content-Type": "application/json"
+                        },
+                        "body": JSON.stringify(cuerpo)
+                      }).then(response => {
+                        console.log(response.body);
+                      }); 
+                      }else{
+                      alert("Usted no es administrador para realizar esta acción.")
+                    }
                   } catch (error) {
                       console.log(error);
                   }
                             
-//                if (soyAdmin.checked){
-                  /*if (2+2){
-                  let url = './api/productos/';
-                    await fetch(url + id + '?admin=true', {
-                      method: 'PUT'
-                    }).then(response => alert("Eliminado: "+response.json)); 
-                }else{
-                  alert("Usted no es administrador para realizar esta acción.")
-                }*/
+
               }
             
 
@@ -235,7 +262,6 @@
 
                 let idCart = JSON.parse(localStorage.getItem("cart"))
                 let cart=JSON.parse(idCart);
-                console.log(cart.id);
                 let producto;
 
                 let url1 = './api/productos/';
@@ -246,27 +272,23 @@
                 .then((result) => 
                 {
                  producto = result;
+                 producto.id = JSON.stringify(producto.id);
+                 producto.timestamp = JSON.stringify(producto.timestamp);
                 })
 
-                producto.id = JSON.stringify(producto.id)
-
-                
                 let url = './api/carrito/';
-                console.log("fff"+JSON.stringify(producto));
-                console.log(producto);
-                    await fetch(url + cart.id + '/productos', {
-                      method: 'POST',
-                      body: JSON.stringify(producto)
+                await fetch(url + cart.id + '/productos', {   
+                        "method": 'POST',
+                        "headers": {
+                            "Content-Type": "application/json"
+                        },
+                        "body": JSON.stringify(producto)
                     })
-                    .then((response) => response.json())
-                    .then((result) => 
-                    {
-                      //console.log(result);
-                      //localStorage.setItem('cart', JSON.stringify(result));
-                    })
+                    .then((response) => console.log(response.body));
+                    //.then((result) => //{                      console.log(result);                      //localStorage.setItem('cart', JSON.stringify(result));                    })
                     
                     //.then(response => alert("Agregado al carrito: "+response.json)); 
-                }
+              }
               
               
 
