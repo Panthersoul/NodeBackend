@@ -115,9 +115,12 @@
           }
 
           async function eliminar(id){
+            let soyAdmin = document.getElementById("admin");
+            
             if (soyAdmin.checked){
-                let url = './api/productos/';
-                await fetch(url + id + '?admin=true', {
+                let url = './api/carrito/';
+                console.log(url + id +"/productos/"+id+"?admin=true");
+                await fetch(url + id +"/productos/"+id+"?admin=true", {
                   method: 'DELETE'
                 }).then(response => alert("Eliminado: "+response.json));
               
@@ -125,114 +128,6 @@
               alert("Usted no es administrador para realizar esta acción.")
             }
           }
-
-          let nombre = document.getElementById("nombreProducto");
-          let descr = document.getElementById("descripcionProducto");
-          let codigo = document.getElementById("codigoProducto");
-          let foto = document.getElementById("foto");
-          let precio = document.getElementById("precio");
-          let stock = document.getElementById("stock");
-          let idModal = document.getElementById("idModal");
-          
-         async function actualizarIdModal(id){
-            let url = './api/productos';
-            try {
-                  let url1 = './api/productos';
-                  await fetch(url+'/'+id, {
-                      method: 'GET'
-                      })
-                    .then((response) => response.json())
-                    .then((result) => 
-                    {
-                      arti = result;
-                    })
-
-                  idModal.value = id;
-                  nombre.value = arti.nombreProducto;
-                  descr.value = arti.descripcionProducto;
-                  codigo.value = arti.codigoProducto;
-                  foto.value = arti.urlFotoProducto;
-                  precio.value = arti.precioProducto;
-                  stock.value = arti.stockProducto;
-                  admin.value = arti.admin;
-
-          }catch (error) {
-                  console.log(error);
-              }
-            }
-        
-
-          async function actualizar(){
-            //e.preventDefault();
-            let id = document.getElementById("idModal")
-            
-            id = id.value;
-            try{
-              let cuerpo = {
-                      "nombreProducto": nombre.value,
-                      "descripcionProducto": descr.value,
-                      "codigoProducto": codigo.value,
-                      "urlFotoProducto": foto.value,
-                      "precioProducto": precio.value,
-                      "stockProducto": stock.value,
-                      "id": id,
-                      "admin": JSON.stringify(true)
-
-              }
-
-                if (admin.value === "true"){
-                let url = './api/productos/';
-                console.log(url + id +"/?admin=true");
-                  await fetch(url + id, {
-                    "method": 'PUT',
-                    "headers": {
-                        "Content-Type": "application/json"
-                    },
-                    "body": JSON.stringify(cuerpo)
-                  }).then(response => {
-                    console.log(response.body);
-                  }); 
-                  }else{
-                  alert("Usted no es administrador para realizar esta acción.")
-                }
-              } catch (error) {
-                  console.log(error);
-              }
-                        
-
-          }
-        
-
-          async function agregarCarrito (id){
-
-            let idCart = JSON.parse(localStorage.getItem("cart"))
-            let cart=JSON.parse(idCart);
-            let producto;
-
-            let url1 = './api/productos/';
-              await fetch(url1+id, {
-              method: 'GET'
-              })
-            .then((response) => response.json())
-            .then((result) => 
-            {
-             producto = result;
-             producto.id = JSON.stringify(producto.id);
-             producto.timestamp = JSON.stringify(producto.timestamp);
-            })
-
-            let url = './api/carrito/';
-            await fetch(url + cart.id + '/productos', {
-                    "method": 'POST',
-                    "headers": {
-                        "Content-Type": "application/json"
-                    },
-                    "body": JSON.stringify(producto)
-                })
-                .then((response) => console.log(response.body));
-          }
-          
-          
 
 
           (function () {

@@ -1,4 +1,5 @@
 import express, { Router } from "express";
+import res from "express/lib/response";
 import moment from 'moment';
 import Carrito from "../class/carrito.js";
 
@@ -71,6 +72,7 @@ routerCart.delete('/:id', (req, red) => {
         try{
             console.log(req.params);
             let respuesta = await carrito.deleteById(req.params.id)
+            return red.json();
         }catch(error){
             throw new Error(error)
         }
