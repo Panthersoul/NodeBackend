@@ -14,7 +14,29 @@ const routerProd = Router();
 routerProd.use(express.json());
 routerProd.use(express.urlencoded({ extended: true }))
 
-routerProd.get('/',(req,res) => {   
+const admin = false;
+
+const validarAdmin = (req, res, next) => {
+    /*
+    req.user = {
+      fullName: "Andres",
+      isAdmin: true
+    };
+    */
+   if (admin){
+    next()
+   }else{
+    res.json({
+        error: -1,
+        description: `Ruta ${req.path} método ${req.method} no autorizada`
+    })
+   }
+    
+  };
+
+
+
+routerProd.get('/', validarAdmin, (req,res) => {   
         const mostrarProductos = async () => {
         try{
             const data = await prods.getAll(prods.fileName);
@@ -27,7 +49,7 @@ routerProd.get('/',(req,res) => {
     mostrarProductos();
 })
 
-routerProd.get('/:id', (req, res) => {
+routerProd.get('/:id', validarAdmin, (req, res) => {
     const traerProductos = async () => {
         try{            
                 const data = await prods.getById(req.params.id)               
@@ -41,7 +63,7 @@ routerProd.get('/:id', (req, res) => {
 })
 
 
-routerProd.post('/',(req,res) => {    
+routerProd.post('/', validarAdmin, (req,res) => {    
     const agregarProducto = async() => {
         try{
             let objetoNuevo = req.body;
@@ -66,7 +88,7 @@ routerProd.post('/',(req,res) => {
     agregarProducto()
 })
 
-routerProd.put('/:id', (req,res) => {    
+routerProd.put('/:id', validarAdmin, (req,res) => {    
     const modificarProducto = async() => {
         try{
             if (req.body.admin == "true"){
@@ -84,7 +106,7 @@ routerProd.put('/:id', (req,res) => {
 })
 
 
-routerProd.delete('/:id', (req, res) => {
+routerProd.delete('/:id', validarAdmin, (req, res) => {
     const borrarProductos = async () => {
         try{
             if (req.query.admin == "true"){

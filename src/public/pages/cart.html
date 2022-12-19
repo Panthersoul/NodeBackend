@@ -119,6 +119,7 @@
             let valorIDCart = JSON.parse(localStorage.getItem("cart"));
             valorIDCart = JSON.parse(valorIDCart);
             window.location.reload();
+            
             if (soyAdmin.checked){
               let url = './api/carrito/';
               console.log(url + valorIDCart.id +"/productos/"+id+"?admin=true");

@@ -17,6 +17,13 @@ app.use('/api/carrito', routerCart);
 app.use(express.json())
 app.use(express.urlencoded({extended: true}));
 
+app.use((req,res) => {
+    res.json({
+        error: -2,
+        description: `Ruta ${req.path} método ${req.method} no implementada`
+    })
+})
+
 //const PORT = process.env.PORT || 8080
 
 app.listen(8080, () => {

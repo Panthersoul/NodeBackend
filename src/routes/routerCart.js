@@ -12,8 +12,9 @@ routerCart.use(express.urlencoded({ extended: true }))
 
 const carrito = new Carrito("./carrito.txt");
 
+routerCart.post('/', (req,res) => {    
 
-routerCart.post('/',(req,res) => {    
+    
     const crearCarrito = async() => {
         try{
             
@@ -32,9 +33,6 @@ routerCart.post('/',(req,res) => {
 
 routerCart.get('/:id/productos',(req,res) => {    
     const enviarProds = async() => {
-
-        
-        console.log(req.params);
         try{
             
             let a = await carrito.getById(req.params.id);
