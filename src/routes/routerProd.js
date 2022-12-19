@@ -14,15 +14,17 @@ const routerProd = Router();
 routerProd.use(express.json());
 routerProd.use(express.urlencoded({ extended: true }))
 
-const admin = false;
+const admin = true;
 
 const validarAdmin = (req, res, next) => {
+   
     /*
     req.user = {
       fullName: "Andres",
       isAdmin: true
     };
     */
+
    if (admin){
     next()
    }else{
@@ -66,21 +68,16 @@ routerProd.get('/:id', validarAdmin, (req, res) => {
 routerProd.post('/', validarAdmin, (req,res) => {    
     const agregarProducto = async() => {
         try{
+
             let objetoNuevo = req.body;
+            
             objetoNuevo = {
                 timestamp: moment.now(),
                 ...objetoNuevo
             }
-            console.log(objetoNuevo);
-            if (req.body.admin == "true"){
+            
             await prods.save(objetoNuevo)
-
-                //return res.json("agregado")
-                return res.redirect('/productos')
-            }
-            else{
-                return res.json("No tiene permisos")
-            }
+            return res.redirect('/productos')
         }catch(error){
             throw new Error(error)
         }
@@ -91,13 +88,8 @@ routerProd.post('/', validarAdmin, (req,res) => {
 routerProd.put('/:id', validarAdmin, (req,res) => {    
     const modificarProducto = async() => {
         try{
-            if (req.body.admin == "true"){
             await prods.modifyById(JSON.stringify(req.body))
             return res.json("Se ha modificado.")
-            }
-            else{
-                return res.json("No tiene permisos")
-            }
         }catch(error){
             throw new Error(error)
         }
@@ -109,12 +101,8 @@ routerProd.put('/:id', validarAdmin, (req,res) => {
 routerProd.delete('/:id', validarAdmin, (req, res) => {
     const borrarProductos = async () => {
         try{
-            if (req.query.admin == "true"){
-                const data = await prods.deleteById(req.params.id)          
-                return res.json(data);
-            }else{
-                return res.json("No tiene permisos")
-            }
+            const data = await prods.deleteById(req.params.id)    
+            return res.json(data)      
         }catch(error){
             throw new Error(error)
         }

@@ -22,11 +22,6 @@
           <li class="nav-item">
             <a class="nav-link active" aria-current="page" href="#"></a>
           </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">ADMIN
-              <input type="checkbox" id="admin" name="admin" value="True">
-            </a>
-          </li>
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
               Acciones
@@ -115,12 +110,11 @@
           }
 
           async function eliminar(id){
-            let soyAdmin = document.getElementById("admin");
+            
             let valorIDCart = JSON.parse(localStorage.getItem("cart"));
             valorIDCart = JSON.parse(valorIDCart);
             window.location.reload();
             
-            if (soyAdmin.checked){
               let url = './api/carrito/';
               console.log(url + valorIDCart.id +"/productos/"+id+"?admin=true");
                 
@@ -130,11 +124,6 @@
                 then(res => {
                   console.log(res);
                 })
-              
-            }else{
-              alert("Usted no es administrador para realizar esta acción.")
-            }
-            
           }
 
 

@@ -49,11 +49,6 @@ routerCart.get('/:id/productos',(req,res) => {
 routerCart.post('/:id/productos',(req, res) => {    
     const crearCarrito = async() => {
         try{
-            
-            console.log("Query en el request: "+JSON.stringify(req.query))
-            console.log(JSON.stringify(req.body));
-            console.log("Parametro en el request: "+JSON.stringify(req.params))
-            
             let respuesta = await carrito.addProductsToCart(req.params, req.body)
             return res.json(respuesta);
         }catch(error){
@@ -65,12 +60,11 @@ routerCart.post('/:id/productos',(req, res) => {
 
 
 
-routerCart.delete('/:id', (req, red) => {
+routerCart.delete('/:id', (req, res) => {
     const eliminarCarrito = async() => {
         try{
-            console.log(req.params);
             let respuesta = await carrito.deleteById(req.params.id)
-            //return red.json(respuesta);
+            return res.json(respuesta);
         }catch(error){
             throw new Error(error)
         }
@@ -81,7 +75,6 @@ routerCart.delete('/:id', (req, red) => {
 routerCart.delete('/:id/productos/:id_prod', (req, res) => {
     const eliminarCarrito = async() => {
         try{
-            console.log(req.params.id, req.params.id_prod);
             let respuesta = await carrito.deleteProductsFromCart(req.params.id, req.params.id_prod)
             return res.json(respuesta);
         }catch(error){
