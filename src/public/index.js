@@ -63,9 +63,6 @@ const agregarMensaje = (mensajes) =>{
     const mensajeFinal = messages.map(mensaje => crearEtiquetas(mensaje)).join("");
     let a = document.getElementById("chat");
     a.innerHTML = mensajeFinal;
-    
-    
-    
 }
 
 socket.on("messages", (messages) => agregarMensaje(messages))
