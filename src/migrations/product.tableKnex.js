@@ -2,6 +2,9 @@ const database = require("../bd/indexKnex.js");
 
 const createTable = async () => {
     try {
+
+        await database.schema.dropTableIfExists("product");
+
         await database.schema.createTable('product', (productTable) => {
             productTable.increments("id").primary();
             productTable.string("title", 50).notNullable();

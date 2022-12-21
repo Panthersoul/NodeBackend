@@ -2,6 +2,7 @@ const database = require("../bd/indexSQLite");
 
 const createTable = async () => {
     try {
+        await database.schema.dropTableIfExists("messages");
         await database.schema.createTable('messages', (messageTable) => {
             messageTable.increments("id").primary();
             messageTable.string("email", 50).notNullable();
