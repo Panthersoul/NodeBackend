@@ -1,4 +1,6 @@
-const fs = require("fs");
+
+const database = require("./bd/indexSQLite.js")
+const fs = require("fs"); 
 
 const creandoArchivo = async (fileName) => {
     try {

@@ -27,7 +27,6 @@ const crearEtiquetasProductos =(producto) => {
 }
 
 const agregarProducto= (producto) => {
-    console.log(producto);
     const productoFinal = producto.map(producto => crearEtiquetasProductos(producto)).join("<br>")
     document.getElementById("contenedorProductos").innerHTML= productoFinal
 }
@@ -49,7 +48,7 @@ boton.addEventListener("click", ()=> {
     socket.emit("new_message", objetoMensaje)
 })
 
-const crearEtiquetas =(mensajes) => {
+const crearEtiquetas = (mensajes) => {
     const {email,date,mensaje} = mensajes
     return `
     <div>
@@ -59,10 +58,14 @@ const crearEtiquetas =(mensajes) => {
     </div>`
 }
 
-const agregarMensaje= (mensajes) =>{
-    const mensajeFinal = mensajes.map(mensaje => crearEtiquetas(mensaje)).join("")
-    console.log(mensajeFinal) 
-    document.getElementById("chat").innerHTML= mensajeFinal
+const agregarMensaje = (mensajes) =>{
+    messages = mensajes;
+    const mensajeFinal = messages.map(mensaje => crearEtiquetas(mensaje)).join("");
+    let a = document.getElementById("chat");
+    a.innerHTML = mensajeFinal;
+    
+    
+    
 }
 
 socket.on("messages", (messages) => agregarMensaje(messages))

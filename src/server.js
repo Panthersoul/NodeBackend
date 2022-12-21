@@ -1,13 +1,37 @@
-const Contenedor = require("./desafio.js")
 const express = require("express")
 const {Server: HttpServer}= require("http")
 const {Server: IOServer} = require("socket.io")
 const fs= require("fs")
-const leerArchivo = new Contenedor("productos.txt")
+//const leerArchivo = new Contenedor("productos.txt")
+
+const path = require("path");
+
+const contenedor = require("./desafioDB.js");
+
+
+const productApi = new contenedor({
+    client: "mysql",
+    connection: {
+    host: "127.0.0.1",
+    user: "root",
+    password: "",
+    database: "ecommerce",
+  },
+  pool: { min: 0, max: 7 },
+}, "product");
+
+const messageApi = new contenedor({
+    client: "sqlite3",
+    connection:  { filename: path.resolve(  __dirname, "./database/ecommerce.sqlite")},
+    useNullAsDefault: true
+}, "messages");
+
 
 // const route = express.Router()
 const app= express()
 const {engine} = require("express-handlebars")
+const Contenedor = require("./desafio.js")
+
 
 const httpServer= new HttpServer(app)
 const ioServer= new IOServer(httpServer)
@@ -30,7 +54,8 @@ app.use(express.static(__dirname + "/public"))
 app.get("/", (req, res) => {
     const traerProductos = async () => {
         try{
-            const data = leerArchivo.getAll()
+            const data = productApi.getAll();
+            console.log(data);
             res.render("formulario", {data:data}) 
         }catch(error){
             throw new Error(error)
@@ -43,8 +68,8 @@ app.post("/productos",(req,res) => {
     const agregarProducto = async() => {
         try{
             const objetoNuevo = req.body
+            await productApi.saveProduct(objetoNuevo);
             console.log(objetoNuevo)
-            await leerArchivo.save(objetoNuevo)
             res.redirect("/") 
         }catch(error){
             throw new Error(error)
@@ -54,29 +79,30 @@ app.post("/productos",(req,res) => {
 })
 
 //WEBSOCKETS
-const chatParseado= JSON.parse(fs.readFileSync("chatMensajes.txt"))
+async function cargarMsg(){
+ return await messageApi.getAll(); 
+}
+
+let chatParseado = cargarMsg();
 
 ioServer.on("connection", async (socket) => {
 
     console.log("Usuario conectado")
-
     //PRODUCTOS
-    socket.emit("products", await leerArchivo.getAll())
+    socket.emit("products", await productApi.getAll());
     socket.on("new_product", async(producto) => {
-        console.log(producto)
-        await leerArchivo.save(producto)
-        const data = await leerArchivo.getAll()
-        ioServer.sockets.emit("products", data)
+        const data1 = productApi.saveProduct(producto);
+        let prods = await productApi.getAll();
+        ioServer.sockets.emit("products", prods);
     })
 
-    //MENSAJES -CHAT
+    //MENSAJES -CHAT 
     socket.emit("messages",chatParseado)
     socket.on("new_message", async(mensaje) =>{   
-        chatParseado.push(mensaje);
+        messageApi.saveMessage(mensaje);
+        chatParseado = await messageApi.getAll();
         ioServer.sockets.emit("messages", chatParseado)
-        await fs.promises.writeFile("chatMensajes.txt", JSON.stringify(chatParseado))
-        
-    })
+    })    
 })
 
 httpServer.listen(8080, () => {
