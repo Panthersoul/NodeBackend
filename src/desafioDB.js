@@ -38,17 +38,16 @@ class Contenedor{
    }
 
     async getById(id){
-       try{
-        const contenido = await fs.promises.readFile(this.fileName)
-        const objeto = JSON.parse(contenido)
-
-        let objetoId = objeto.find((x) => x.id == id) || null;
-        
-        return objetoId;
-        
-       }catch(error){
-            throw error
-       }
+        try {
+            const response = await this.database
+              .from(this.table)
+              .select("*")
+              .where({ id });
+      
+            return response;
+          } catch (err) {
+            throw new Error(`No se encuentra el id: ${err}`);
+          }
    }
 
     async getAll(){
@@ -73,6 +72,7 @@ class Contenedor{
             throw new Error(`Error al borrar data:  ${error}`);
        }
    }
+
    async deleteAll(){
     try {
         await this.database(this.table).del();

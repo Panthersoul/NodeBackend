@@ -49,12 +49,12 @@ boton.addEventListener("click", ()=> {
 })
 
 const crearEtiquetas = (mensajes) => {
-    const {email,date,mensaje} = mensajes
+    const {email,date,message} = mensajes
     return `
     <div>
         <strong id="estilo">${email}</strong>
         <strong id="fecha">[${date}] :</strong>
-        <em id="message">${mensaje}</em>
+        <em id="message">${message}</em>
     </div>`
 }
 
