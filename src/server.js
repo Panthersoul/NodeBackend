@@ -8,7 +8,7 @@ const path = require("path");
 
 const contenedor = require("./desafioDB.js");
 
-
+//Configuracion MARIAdb
 const productApi = new contenedor({
     client: "mysql",
     connection: {
@@ -20,6 +20,8 @@ const productApi = new contenedor({
   pool: { min: 0, max: 7 },
 }, "product");
 
+
+//Configuracion SQLITE
 const messageApi = new contenedor({
     client: "sqlite3",
     connection:  { filename: path.resolve(  __dirname, "./database/ecommerce.sqlite")},
